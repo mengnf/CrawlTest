@@ -7,9 +7,9 @@ import os
 
 
 # Json文件保存路径
-ATTACHMENT_PATH_JSON = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\01_Attachment\JsonFile'
+ATTACHMENT_PATH_JSON = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\\01_Attachment\JsonFile'
 # Excel文件保存路径
-ATTACHMENT_PATH_EXCEL = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\01_Attachment\ExcelFile'
+ATTACHMENT_PATH_EXCEL = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\\01_Attachment\ExcelFile'
 
 USER_AGENT_LIST = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36",

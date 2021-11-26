@@ -56,6 +56,7 @@ def get_cookie_taobao():
     cookies_dict = {cookie['name']: cookie['value'] for cookie in driver.get_cookies()}
     driver.quit()
     # print('cookies_dict：' + cookies_dict)
+    write_to_json(cookies_dict, f'淘宝cookie_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}')
     return cookies_dict
 
 # 获取淘宝header
