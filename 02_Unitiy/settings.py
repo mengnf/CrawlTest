@@ -4,11 +4,7 @@
     配置类
 """
 import os
-import random
 
-import pymysql
-
-MYSQL_CONNECT = pymysql.connect(host='192.168.2.104', port=3306, user='root', passwd='123456', db='CAREER', charset='utf8')
 
 # Json文件保存路径
 ATTACHMENT_PATH_JSON = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\01_Attachment\JsonFile'
@@ -39,8 +35,3 @@ USER_AGENT_LIST = [
     "Mozilla/5.0 (compatible; Baiduspider-render/2.0; +http://www.baidu.com/search/spider.html)",
     "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0;"
 ]
-
-
-# 随机获取user_agent
-def get_user_agent():
-    return random.choice(USER_AGENT_LIST)
