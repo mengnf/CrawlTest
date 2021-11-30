@@ -11,15 +11,16 @@ from random import choice
 from selenium import webdriver
 from lxml import etree
 
-
+from common import get_user_agent, get_cookie_taobao
 
 header = {}
-header['user-agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.75 Safari/537.36'
+header['user-agent'] = get_user_agent()
 header['referer'] = 'https://buyertrade.taobao.com/trade/itemlist/list_bought_items.htm'
 
-cookies = {}
+cookies = get_cookie_taobao()
 totalPage = 1
-cookiestr = input('请输入淘宝接口cookie, 回车键确认\n')
+# cookiestr = input('请输入淘宝接口cookie, 回车键确认\n')
+# cookiestr = 't=95b276fd1577c82d10a44b122f63a848; ucn=center; thw=cn; _bl_uid=dykFmwUIfd02Chbh9wq03a9vnhdh; cna=wHsNGrG0Lw4CAXd7e4I5xz2W; lgc=mengnf; tracknick=mengnf; mt=ci=7_1; _m_h5_tk=b9dafdf9a3e3c38ab74a172140fa373e_1638247653538; _m_h5_tk_enc=f998c742b187ef2c8c22106fceec1c99; xlly_s=1; cookie2=1961301cc40a6f65e14c3acb691ccc7e; _tb_token_=e5763e7ee1e31; _samesite_flag_=true; sgcookie=E100UfdhYKNDMJo9LfwnHG9udjCSRHWeHYNXNZtXgvVsQh0dWqsWyvqzdGu/0jttiShT8htznJoJguExWqhQFizSUH57VXFkza4boBFFc7wPj9Y=; unb=441517383; uc1=cookie14=Uoe3f4LYpy0+/A==&pas=0&cookie16=W5iHLLyFPlMGbLDwA+dvAGZqLg==&cookie21=UtASsssmfaCOMId4NoCaRQ==&existShop=false&cookie15=W5iHLLyFOGW7aA==; uc3=lg2=UIHiLt3xD8xYTw==&vt3=F8dCvUj00gwFG6x2IaM=&nk2=DlVn2udp&id2=Vyh9z0Bqr7Fy; csg=6c232842; cancelledSubSites=empty; cookie17=Vyh9z0Bqr7Fy; dnk=mengnf; skt=721cb0be41bd0729; existShop=MTYzODI0MDcwNg==; uc4=nk4=0@DDC8hckxJ9J6aGxbJnygu9E=&id4=0@VX9MjMqZYJhENbTyHUhgAHqETIk=; publishItemObj=Ng==; _cc_=U+GCWk/7og==; _l_g_=Ug==; sg=f3b; _nk_=mengnf; cookie1=U+Nj4NIW2cLbvTTzqn3nfRDSo0Z5pionRhRgiDjEhSM=; v=0; l=eBxDukyRg28sfKOLBO5ZPurza77tUQAb4sPzaNbMiInca6TCtF_biNCdV2ivSdtjgtCUeetrRRzQkRLHR3AiVh9N3AJRKIcjExvO.; tfstk=ce_cBnXCii-X2jtlArTfwTK7LSqdafn2pNSFzw5InS8VxufBgsft4D8WB7ATd-o1.; isg=BLS04eqXaUJSDP201YgMgj9mhXImjdh3WtY25E4XHz_CuVQDdp26B3tzOfFhQRDP'
 
 # dateBegin = input('请输入开始日期,回车键确认\n')
 #
@@ -35,10 +36,9 @@ cookiestr = input('请输入淘宝接口cookie, 回车键确认\n')
 #               '''
 
 
-
-for cookie in cookiestr.split(';'):
-    name, value = cookie.strip().split('=', 1)
-    cookies[name] = value
+# for cookie in cookiestr.split(';'):
+#     name, value = cookie.strip().split('=', 1)
+#     cookies[name] = value
 
 
 def getOnePageOrderHistory(pageNum, newURL=None):
@@ -401,11 +401,11 @@ def getWuliu():
 if __name__ == '__main__':
     # getWuliu()
     title = ["ID", "快递", "订单号", "姓名", "电话", "地址", "卖家", "名称", "订单创建时间", "价格", "状态"]
-    timestr = time.strftime('%Y.%m.%d.%H.%M%S', time.localtime(time.time()))
-    out = open(timestr + 'csv.csv', 'a', newline='', encoding='utf-8-sig')
+    timestr = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+    out = open(f'淘宝订单_{timestr}.csv', 'a', newline='', encoding='utf-8-sig')
     csv_write = csv.writer(out, dialect='excel')
     csv_write.writerow(title)
-    num = int(input('请输入抓取的总页码数,回车键确认\n'))
+    num = 5 # int(input('请输入抓取的总页码数,回车键确认\n'))
     for i in range(1, num+1):
         print("正在抓取第{0:d}页,请稍后....".format(i))
         getOnePageOrderHistory(i)

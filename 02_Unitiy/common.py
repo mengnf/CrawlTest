@@ -1,5 +1,6 @@
 # 公共方法类
 # -*-coding:utf-8-*-
+import csv
 import datetime
 import json
 import os.path
@@ -55,17 +56,19 @@ def get_cookie_taobao():
     time.sleep(2)
     cookies_dict = {cookie['name']: cookie['value'] for cookie in driver.get_cookies()}
     driver.quit()
-    # print('cookies_dict：' + cookies_dict)
-    write_to_json(cookies_dict, f'淘宝cookie_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}')
     return cookies_dict
 
 # 获取淘宝header
 def get_taobao_header():
-    return {
-        'user-agent': get_user_agent(),
-        'cookie': get_cookie_taobao()
-    }
+    # cookie_str = ''
+    # cookies_dict = get_cookie_taobao()
+    # for cookie in cookies_dict:
+    #     cookie_str += f'{cookie}={cookies_dict[cookie]};'
 
+    header = {}
+    header['user-agent'] = get_user_agent()
+
+    return header
 
 # 将数据保存为json文件
 def write_to_json(data, file_name, en_ascii=True):
@@ -94,7 +97,7 @@ def write_to_json(data, file_name, en_ascii=True):
 
 
 # 把二维列表存入excel中
-def write_to_excel(data, file_name):
+def write_to_excel(data, file_name, columns_map=None, sort=None):
     try:
         # 如果文件名没有值就默认赋值时间戳
         if not (file_name and file_name.strip()):
@@ -104,16 +107,12 @@ def write_to_excel(data, file_name):
 
         # 将字典列表转换为DataFrame
         pf = pd.DataFrame(list(data))
-        # 指定字段顺序
-        order = ['rank_num', 'rank_title', 'rank_url']
-        pf = pf[order]
-        # 将列名替换为中文
-        columns_map = {
-            'rank_num': '排名',
-            'rank_title': '标题',
-            'rank_url': '链接'
-        }
-        pf.rename(columns=columns_map, inplace=True)
+        # 排序
+        if sort:
+            pf = pf[sort]
+        # 列头重命名
+        if columns_map:
+            pf.rename(columns=columns_map, inplace=True)
         # 指定生成的Excel表格名称
         file_path = pd.ExcelWriter(file_name)
         # 替换空单元格
@@ -122,6 +121,25 @@ def write_to_excel(data, file_name):
         pf.to_excel(file_path, encoding='utf-8', index=False)
         # 保存表格
         file_path.save()
+
+        print('Excel文件保存成功')
+    except Exception as ex:
+        print(f'Excel文件保存失败：{ex}')
+
+
+def write_to_csv(data, file_name):
+    try:
+        # 如果文件名没有值就默认赋值时间戳
+        if not (file_name and file_name.strip()):
+            file_name = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
+
+        file_name = f'{ATTACHMENT_PATH_EXCEL}\{file_name}.csv'
+
+        title = ["ID", "快递", "订单号", "姓名", "电话", "地址", "卖家", "名称", "订单创建时间", "价格", "状态", "采集时间"]
+
+        out = open(file_name, 'w', newline='')
+        csv_write = csv.writer(out, dialect='excel')
+        csv_write.writerows(data.value)
 
         print('Excel文件保存成功')
     except Exception as ex:
