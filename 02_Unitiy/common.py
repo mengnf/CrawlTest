@@ -10,7 +10,7 @@ import random
 import xlwt
 import pandas as pd
 
-from settings import ATTACHMENT_PATH_JSON, ATTACHMENT_PATH_EXCEL, USER_AGENT_LIST
+from settings import ATTACHMENT_PATH_JSON, ATTACHMENT_PATH_EXCEL, USER_AGENT_LIST, TaoBaoText
 
 import pymysql
 
@@ -38,12 +38,12 @@ def get_user_agent():
 def get_cookie_taobao():
     print('使用selenium模拟登陆')
     # 使用selenium模拟登陆，获取并返回cookie
-    username = 'mengnf'
-    password = 'Feige107358'
+    username = TaoBaoText.USERNAME
+    password = TaoBaoText.PASSWORD
     options = webdriver.ChromeOptions()
-    options.add_argument('--disable-blink-features=AutomationControlled')
-    # options.add_argument('--headless')
-    # options.add_argument('--disable-gpu')
+    options.add_argument('--disable-blink-features=AutomationControlled')  # 去除浏览器selenium监控
+    options.add_argument('--headless')  # 浏览器不提供可视化页面
+    options.add_argument('--disable-gpu')  # 禁用GPU加速
     driver = webdriver.Chrome(options=options)
 
     driver.get('https://login.taobao.com/')
@@ -144,3 +144,23 @@ def write_to_csv(data, file_name):
         print('Excel文件保存成功')
     except Exception as ex:
         print(f'Excel文件保存失败：{ex}')
+
+
+"""
+selenium add_argument 参数表
+
+chrome_options.add_argument('--user-agent=""')  # 设置请求头的User-Agent
+chrome_options.add_argument('--window-size=1280x1024')  # 设置浏览器分辨率（窗口大小）
+chrome_options.add_argument('--start-maximized')  # 最大化运行（全屏窗口）,不设置，取元素会报错
+chrome_options.add_argument('--disable-infobars')  # 禁用浏览器正在被自动化程序控制的提示
+chrome_options.add_argument('--incognito')  # 隐身模式（无痕模式）
+chrome_options.add_argument('--hide-scrollbars')  # 隐藏滚动条, 应对一些特殊页面
+chrome_options.add_argument('--disable-javascript')  # 禁用javascript
+chrome_options.add_argument('--blink-settings=imagesEnabled=false')  # 不加载图片, 提升速度
+chrome_options.add_argument('--headless')  # 浏览器不提供可视化页面
+chrome_options.add_argument('--ignore-certificate-errors')  # 禁用扩展插件并实现窗口最大化
+chrome_options.add_argument('--disable-gpu')  # 禁用GPU加速
+chrome_options.add_argument('–disable-software-rasterizer')
+chrome_options.add_argument('--disable-extensions')
+chrome_options.add_argument('--start-maximized')
+"""

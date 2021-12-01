@@ -6,6 +6,19 @@
 import os
 
 
+class CrawlType:
+    REQUESTS = 'REQUESTS'
+    SELENIUM = 'SELENIUM'
+    SCRAPY = 'SCRAPY'
+    SCRAPY_REDIS = 'SCRAPY_REDIS'
+    APPIUM = 'APPIUM'
+
+
+class TaoBaoText:
+    USERNAME = 'mengnf'
+    PASSWORD = 'Feige107358'
+
+
 # Json文件保存路径
 ATTACHMENT_PATH_JSON = f'{os.path.abspath(os.path.dirname(os.getcwd()))}\\01_Attachment\JsonFile'
 # Excel文件保存路径
